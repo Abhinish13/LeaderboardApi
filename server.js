@@ -13,6 +13,8 @@ console.log(`${host_Url}`);
 var {mongoose} = require('./db/openshift-mongoose');
 var {Player} = require('./models/player');
 
+app.use(express.static(__dirname + '/public'));
+
 var app = express();
 
 app.use(bodyParser.json());
@@ -141,7 +143,8 @@ app.get('/setScore/:id/:score',(req,res) => {
 app.get('/',(req,res) => {
 
 
-    res.header('Access-Control-Allow-Origin',host_Url).send();
+    res.header('Access-Control-Allow-Origin',host_Url).sendFile(path.join(__dirname, 'index.html'));
+    
 
 });
 
