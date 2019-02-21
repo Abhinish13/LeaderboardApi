@@ -1,0 +1,11 @@
+
+.idea/DatabaseModules.iml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/inspectionProfiles/
+node_modules/
+database/
+.idea/misc.xml
+.idea/mongoSettings.xml
+server/config/config.json
