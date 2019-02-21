@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "IP=0.0.0.0 PORT=3030 mocha --timeout 5000 test/*.test.js",
+    "test": "echo 'Abhinish Raj'",
     "test-watch": "nodemon --exec \"npm test\"",
     "node-watch": "nodemon --exec \"npm start\""
   },

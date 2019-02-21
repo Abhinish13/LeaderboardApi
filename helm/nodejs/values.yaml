@@ -5,9 +5,9 @@ namespace: openshift
 # Memory Limit: Maximum amount of memory the container can use.
 memory_limit: 512Mi
 # Git Repository URL: The URL of the repository with your application source code.
-source_repository_url: http://nishuAbhinish-Raj:Nishuraj_13@35.200.149.204/openshift-demo/api.git
+source_repository_url: https://github.com/Abhinish13/CandyGameApi.git
 # Git Reference: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
-source_repository_ref:test
+source_repository_ref: master
 # Context Directory: Set this to the relative path to your project if it is not in the root of your repository.
 context_dir:
 # Application Hostname: The exposed hostname that will route to the Node.js service, if left blank a value will be defaulted.

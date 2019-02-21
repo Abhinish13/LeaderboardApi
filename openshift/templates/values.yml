@@ -1,0 +1,9 @@
+NAME=candygameapi
+SOURCE_REPOSITORY_URL=https://github.com/Abhinish13/CandyGameApi.git
+SOURCE_REPOSITORY_REF=master
+APPLICATION_DOMAIN=candygameapi
+DATABASE_SERVICE_NAME=candygamedb
+DATABASE_USER=dbuser
+DATABASE_PASSWORD=Prodev1qaz
+DATABASE_NAME=player
+DATABASE_ADMIN_PASSWORD=Password

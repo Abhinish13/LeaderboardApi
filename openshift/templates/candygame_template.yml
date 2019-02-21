@@ -1,0 +1,469 @@
+{
+    "kind": "List",
+    "apiVersion": "v1",
+    "metadata": {},
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Secret",
+            "metadata": {
+                "labels": {
+                    "app": "nodejs-mongodb-example-1",
+                    "template": "nodejs-mongodb-example"
+                },
+                "name": "candygameapi"
+            },
+            "stringData": {
+                "database-admin-password": "Password",
+                "database-password": "Prodev1qaz",
+                "database-user": "dbuser"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "annotations": {
+                    "description": "Exposes and load balances the application pods",
+                    "service.alpha.openshift.io/dependencies": "[{\"name\": \"candygamedb\", \"kind\": \"Service\"}]"
+                },
+                "labels": {
+                    "app": "nodejs-mongodb-example-1",
+                    "template": "nodejs-mongodb-example"
+                },
+                "name": "candygameapi"
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "web",
+                        "port": 8080,
+                        "targetPort": 8080
+                    }
+                ],
+                "selector": {
+                    "name": "candygameapi"
+                }
+            }
+        },
+        {
+            "apiVersion": "route.openshift.io/v1",
+            "kind": "Route",
+            "metadata": {
+                "labels": {
+                    "app": "nodejs-mongodb-example-1",
+                    "template": "nodejs-mongodb-example"
+                },
+                "name": "candygameapi"
+            },
+            "spec": {
+                "host": "candygameapi",
+                "to": {
+                    "kind": "Service",
+                    "name": "candygameapi"
+                }
+            }
+        },
+        {
+            "apiVersion": "image.openshift.io/v1",
+            "kind": "ImageStream",
+            "metadata": {
+                "annotations": {
+                    "description": "Keeps track of changes in the application image"
+                },
+                "labels": {
+                    "app": "nodejs-mongodb-example-1",
+                    "template": "nodejs-mongodb-example"
+                },
+                "name": "candygameapi"
+            }
+        },
+        {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "annotations": {
+                    "description": "Defines how to build the application",
+                    "template.alpha.openshift.io/wait-for-ready": "true"
+                },
+                "labels": {
+                    "app": "nodejs-mongodb-example-1",
+                    "template": "nodejs-mongodb-example"
+                },
+                "name": "candygameapi"
+            },
+            "spec": {
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "candygameapi:latest"
+                    }
+                },
+                "postCommit": {
+                    "script": "npm test"
+                },
+                "source": {
+                    "contextDir": "",
+                    "git": {
+                        "ref": "master",
+                        "uri": "https://github.com/Abhinish13/CandyGameApi.git"
+                    },
+                    "type": "Git"
+                },
+                "strategy": {
+                    "sourceStrategy": {
+                        "env": [
+                            {
+                                "name": "NPM_MIRROR",
+                                "value": ""
+                            },
+                            {
+                                        "name": "DATABASE_SERVICE_NAME",
+                                        "value": "candygamedb"
+                                    },
+                                    {
+                                        "name": "MONGODB_USER",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "database-user",
+                                                "name": "candygameapi"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "MONGODB_PASSWORD",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "database-password",
+                                                "name": "candygameapi"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "MONGODB_DATABASE",
+                                        "value": "player"
+                                    },
+                                    {
+                                        "name": "MONGODB_ADMIN_PASSWORD",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "database-admin-password",
+                                                "name": "candygameapi"
+                                            }
+                                        }
+                                    }
+                        ],
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "name": "nodejs:6",
+                            "namespace": "openshift"
+                        }
+                    },
+                    "type": "Source"
+                },
+                "triggers": [
+                    {
+                        "type": "ImageChange"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "github": {
+                            "secret": "vLrCdSUKBK7SOEROer88yLrCcQ1j5AsUN1WiuIXg"
+                        },
+                        "type": "GitHub"
+                    },
+                    {
+                        "generic": {
+                            "secret": "o51mSHIxHhUXnfqVlvgg1lMeRXdRs4rVCBNRFrwS"
+                        },
+                        "type": "Generic"
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "apps.openshift.io/v1",
+            "kind": "DeploymentConfig",
+            "metadata": {
+                "annotations": {
+                    "description": "Defines how to deploy the application server",
+                    "template.alpha.openshift.io/wait-for-ready": "true"
+                },
+                "labels": {
+                    "app": "nodejs-mongodb-example-1",
+                    "template": "nodejs-mongodb-example"
+                },
+                "name": "candygameapi"
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                    "name": "candygameapi"
+                },
+                "strategy": {
+                    "type": "Recreate"
+                },
+                "template": {
+                    "metadata": {
+                        "labels": {
+                            "name": "candygameapi"
+                        },
+                        "name": "candygameapi"
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "DATABASE_SERVICE_NAME",
+                                        "value": "candygamedb"
+                                    },
+                                    {
+                                        "name": "MONGODB_USER",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "database-user",
+                                                "name": "candygameapi"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "MONGODB_PASSWORD",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "database-password",
+                                                "name": "candygameapi"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "MONGODB_DATABASE",
+                                        "value": "player"
+                                    },
+                                    {
+                                        "name": "MONGODB_ADMIN_PASSWORD",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "database-admin-password",
+                                                "name": "candygameapi"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "image": " ",
+                                "livenessProbe": {
+                                    "httpGet": {
+                                        "path": "/pagecount",
+                                        "port": 8080
+                                    },
+                                    "initialDelaySeconds": 30,
+                                    "timeoutSeconds": 3
+                                },
+                                "name": "nodejs-mongodb-example",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080
+                                    }
+                                ],
+                                "readinessProbe": {
+                                    "httpGet": {
+                                        "path": "/pagecount",
+                                        "port": 8080
+                                    },
+                                    "initialDelaySeconds": 3,
+                                    "timeoutSeconds": 3
+                                },
+                                "resources": {
+                                    "limits": {
+                                        "memory": "512Mi"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                "triggers": [
+                    {
+                        "imageChangeParams": {
+                            "automatic": true,
+                            "containerNames": [
+                                "nodejs-mongodb-example"
+                            ],
+                            "from": {
+                                "kind": "ImageStreamTag",
+                                "name": "candygameapi:latest"
+                            }
+                        },
+                        "type": "ImageChange"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "annotations": {
+                    "description": "Exposes the database server"
+                },
+                "labels": {
+                    "app": "nodejs-mongodb-example-1",
+                    "template": "nodejs-mongodb-example"
+                },
+                "name": "candygamedb"
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "mongodb",
+                        "port": 27017,
+                        "targetPort": 27017
+                    }
+                ],
+                "selector": {
+                    "name": "candygamedb"
+                }
+            }
+        },
+        {
+            "apiVersion": "apps.openshift.io/v1",
+            "kind": "DeploymentConfig",
+            "metadata": {
+                "annotations": {
+                    "description": "Defines how to deploy the database",
+                    "template.alpha.openshift.io/wait-for-ready": "true"
+                },
+                "labels": {
+                    "app": "nodejs-mongodb-example-1",
+                    "template": "nodejs-mongodb-example"
+                },
+                "name": "candygamedb"
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                    "name": "candygamedb"
+                },
+                "strategy": {
+                    "type": "Recreate"
+                },
+                "template": {
+                    "metadata": {
+                        "labels": {
+                            "name": "candygamedb"
+                        },
+                        "name": "candygamedb"
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "MONGODB_USER",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "database-user",
+                                                "name": "candygameapi"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "MONGODB_PASSWORD",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "database-password",
+                                                "name": "candygameapi"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "MONGODB_DATABASE",
+                                        "value": "player"
+                                    },
+                                    {
+                                        "name": "MONGODB_ADMIN_PASSWORD",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "database-admin-password",
+                                                "name": "candygameapi"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "image": " ",
+                                "livenessProbe": {
+                                    "initialDelaySeconds": 30,
+                                    "tcpSocket": {
+                                        "port": 27017
+                                    },
+                                    "timeoutSeconds": 1
+                                },
+                                "name": "mongodb",
+                                "ports": [
+                                    {
+                                        "containerPort": 27017
+                                    }
+                                ],
+                                "readinessProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "/bin/sh",
+                                            "-i",
+                                            "-c",
+                                            "mongo 127.0.0.1:27017/$MONGODB_DATABASE -u $MONGODB_USER -p $MONGODB_PASSWORD --eval=\"quit()\""
+                                        ]
+                                    },
+                                    "initialDelaySeconds": 3,
+                                    "timeoutSeconds": 1
+                                },
+                                "resources": {
+                                    "limits": {
+                                        "memory": "512Mi"
+                                    }
+                                },
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/var/lib/mongodb/data",
+                                        "name": "candygamedb-data"
+                                    }
+                                ]
+                            }
+                        ],
+                        "volumes": [
+                            {
+                                "emptyDir": {
+                                    "medium": ""
+                                },
+                                "name": "candygamedb-data"
+                            }
+                        ]
+                    }
+                },
+                "triggers": [
+                    {
+                        "imageChangeParams": {
+                            "automatic": true,
+                            "containerNames": [
+                                "mongodb"
+                            ],
+                            "from": {
+                                "kind": "ImageStreamTag",
+                                "name": "mongodb:3.2",
+                                "namespace": "openshift"
+                            }
+                        },
+                        "type": "ImageChange"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    }
+                ]
+            }
+        }
+    ]
+}
