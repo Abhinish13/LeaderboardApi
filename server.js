@@ -13,10 +13,10 @@ console.log(`${host_Url}`);
 var {mongoose} = require('./db/openshift-mongoose');
 var {Player} = require('./models/player');
 
-app.use(express.static(__dirname + '/public'));
+
 
 var app = express();
-
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
 
