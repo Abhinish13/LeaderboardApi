@@ -35,9 +35,12 @@ Access to XMLHttpRequest at 'http://candygameapi.apps.d94a.example.opentlc.com/s
 from origin 'http://game.candy.apps.d94a.example.opentlc.com' has been blocked by CORS policy: Response to preflight
  request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource
 
- header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+at api server:
+
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+
 
 xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
 xhttp.setRequestHeader("Access-Control-Allow-Methods","GET, POST, PATCH, PUT, DELETE, OPTIONS");

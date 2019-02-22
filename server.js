@@ -167,7 +167,12 @@ app.get('/setScore/:id/:score',(req,res) => {
             return res.status(404).send("player is empty");
         }
 
-        res.header('Access-Control-Allow-Origin','http://game.candy.apps.d94a.example.opentlc.com').send(player);
+        res.set({
+            'Access-Control-Allow-Origin':'*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods':'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers':'Origin, Content-Type, X-Auth-Token'
+        }).send(player);
     }).catch((e) => {
         res.status(400).send(e);
     })
