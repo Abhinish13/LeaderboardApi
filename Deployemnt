@@ -28,3 +28,65 @@ GITHUB_WEBHOOK_SECRET    Github trigger secret.  A difficult to guess string enc
 GENERIC_WEBHOOK_SECRET   A secret string used to configure the Generic webhook.  
 
 
+error: 
+
+
+Access to XMLHttpRequest at 'http://candygameapi.apps.d94a.example.opentlc.com/setScore/5c6fd9596691b800175d880a/1' 
+from origin 'http://game.candy.apps.d94a.example.opentlc.com' has been blocked by CORS policy: Response to preflight
+ request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource
+
+ header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+
+xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+xhttp.setRequestHeader("Access-Control-Allow-Methods","GET, POST, PATCH, PUT, DELETE, OPTIONS");
+xhttp.setRequestHeader("Access-Control-Request-Headers","*");
+xhttp.setRequestHeader("Content-type", "application/json");
+
+
+import java.io.IOException;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+
+@component
+public class SimpleCORSFilter implements Filter {
+
+private final Logger log = LoggerFactory.getLogger(SimpleCORSFilter.class);
+
+public SimpleCORSFilter() {
+    log.info("SimpleCORSFilter init");
+}
+
+@override
+public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {    
+    
+    HttpServletRequest request = (HttpServletRequest) req;
+    HttpServletResponse response = (HttpServletResponse) res;
+    response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+    response.setHeader("Access-Control-Max-Age", "3600");
+    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
+    chain.doFilter(req, res);
+}
+
+@Override
+public void init(FilterConfig filterConfig) {
+}
+
+@Override
+public void destroy() {
+}
+
+}
