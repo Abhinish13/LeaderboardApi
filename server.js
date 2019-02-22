@@ -95,7 +95,7 @@ app.get('/player/:name',(req,res) => {
     var player = new Player();
     player.name = name;
     player.save().then(() => {
-        res.header('Access-Control-Allow-Origin','*').send(player.id);
+        res.header('Access-Control-Allow-Origin','http://game.candy.apps.d94a.example.opentlc.com').send(player.id);
         // if(!player){
         //     res.status(404).send();
         // }else {
@@ -187,7 +187,7 @@ app.get('/setScore/:id/:score',(req,res) => {
         }
 
         res.set({
-            'Access-Control-Allow-Origin':'*',
+            'Access-Control-Allow-Origin':'http://game.candy.apps.d94a.example.opentlc.com',
             'Content-Type': 'application/json',
             'Access-Control-Allow-Methods':'GET, POST, PATCH, PUT, DELETE, OPTIONS',
             'Access-Control-Allow-Headers':'Origin, Content-Type, X-Auth-Token',
