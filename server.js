@@ -7,6 +7,11 @@ var bodyParser = require('body-parser');
 const _ = require('lodash');
 var path = require('path');
 
+var cors = require('cors');
+
+// use it before all route definitions
+
+
 
 
 
@@ -17,7 +22,7 @@ var app = express();
 
 app.use(express.static(__dirname + '/public'));
 
-
+app.use(cors({origin: 'http://game.candy.apps.d94a.example.opentlc.com'}));
 app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
