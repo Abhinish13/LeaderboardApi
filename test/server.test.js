@@ -1,12 +1,12 @@
 const expect = require('expect');
 const request = require('supertest');
-const {ObjectID} = require('mongodb');
+const ObjectID = require('mongodb').ObjectID;
 
-const {app} = require('./../server');
+const app = require('./../server').app;
 // const {Todo} = require('./../models/todo');
 // const {User} = require('./../models/user');
 // const {todos , populateTodos, users , populateUsers} = require('./seed/seed');
-const {Player} = require('./../models/player');
+const Player = require('./../models/player').Player;
 
 //
 // //dummy object for test

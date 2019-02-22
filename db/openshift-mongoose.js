@@ -1,4 +1,4 @@
-const {mongoURL} = require('../config/openshift-config');
+const mongoURL = require('../config/openshift-config').mongoURL;
 
 var mongoose = require('mongoose');
 //mongo db native driver ,
