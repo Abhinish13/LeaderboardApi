@@ -1,0 +1,8 @@
+Mongo deployment
+
+ docker run -d --name some-mongo \
+    -e MONGO_INITDB_ROOT_USERNAME=mongoadmin \
+    -e MONGO_INITDB_ROOT_PASSWORD=secret \
+    mongo
+
+    mongodb://mongoadmin:secret@172.17.0.2:27017
