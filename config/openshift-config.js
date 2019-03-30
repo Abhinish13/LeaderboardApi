@@ -1,6 +1,6 @@
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
-    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-    mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL || "mongodb://mongoadmin:secret@172.17.0.2:27017/player",
+    ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
+    mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
     mongoURLLabel = "";
 
 if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
@@ -11,7 +11,7 @@ if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
         mongoPassword = process.env[mongoServiceName + '_PASSWORD'],
         mongoUser = process.env[mongoServiceName + '_USER'];
 
-    console.log("\n"+mongoServiceName+"\n"+mongoHost+"\n"+mongoPort+"\n"+mongoDatabase+"\n"+mongoPassword+"\n"+mongoUser);
+    console.log("\n" + mongoServiceName + "\n" + mongoHost + "\n" + mongoPort + "\n" + mongoDatabase + "\n" + mongoPassword + "\n" + mongoUser);
     if (mongoHost && mongoPort && mongoDatabase) {
         mongoURLLabel = mongoURL = 'mongodb://';
         if (mongoUser && mongoPassword) {
@@ -19,9 +19,13 @@ if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
         }
         // Provide UI label that excludes user id and pw
         mongoURLLabel += mongoHost + ':' + mongoPort + '/' + mongoDatabase;
-        mongoURL += mongoHost + ':' +  mongoPort + '/' + mongoDatabase;
+        mongoURL += mongoHost + ':' + mongoPort + '/' + mongoDatabase;
 
     }
 }
 console.log(mongoURL);
-module.exports = {port,ip,mongoURL};
+module.exports = {
+    port,
+    ip,
+    mongoURL
+};
