@@ -22,13 +22,13 @@ var app = express();
 
 app.use(express.static(__dirname + '/public'));
 
-app.use(cors({origin: 'https://game-candy.apps.prod.pdcloudex.com'}));
+app.use(cors({origin: 'http://game.candy.apps.0302.example.opentlc.com'}));
 app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'https://game-candy.apps.prod.pdcloudex.com');
+    res.setHeader('Access-Control-Allow-Origin', 'http://game.candy.apps.0302.example.opentlc.com');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -100,7 +100,7 @@ app.get('/player/:name',(req,res) => {
     var player = new Player();
     player.name = name;
     player.save().then(() => {
-        res.header('Access-Control-Allow-Origin','https://game-candy.apps.prod.pdcloudex.com').send(player.id);
+        res.header('Access-Control-Allow-Origin','http://game.candy.apps.0302.example.opentlc.com').send(player.id);
         // if(!player){
         //     res.status(404).send();
         // }else {
@@ -192,7 +192,7 @@ app.get('/setScore/:id/:score',(req,res) => {
         }
 
         res.set({
-            'Access-Control-Allow-Origin':'https://game-candy.apps.prod.pdcloudex.com',
+            'Access-Control-Allow-Origin':'http://game.candy.apps.0302.example.opentlc.com',
             'Content-Type': 'application/json',
             'Access-Control-Allow-Methods':'GET, POST, PATCH, PUT, DELETE, OPTIONS',
             'Access-Control-Allow-Headers':'Origin, Content-Type, X-Auth-Token',
