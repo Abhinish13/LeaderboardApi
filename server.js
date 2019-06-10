@@ -11,6 +11,7 @@ var cors = require('cors');
 
 // use it before all route definitions
 
+var cors_url = process.env.CORS_URL
 
 
 
@@ -22,13 +23,13 @@ var app = express();
 
 app.use(express.static(__dirname + '/public'));
 
-app.use(cors({origin: 'http://game.candy.apps.0302.example.opentlc.com'}));
+app.use(cors({origin: cors_url}));
 app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://game.candy.apps.0302.example.opentlc.com');
+    res.setHeader('Access-Control-Allow-Origin', cors_url);
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -100,7 +101,7 @@ app.get('/player/:name',(req,res) => {
     var player = new Player();
     player.name = name;
     player.save().then(() => {
-        res.header('Access-Control-Allow-Origin','http://game.candy.apps.0302.example.opentlc.com').send(player.id);
+        res.header('Access-Control-Allow-Origin', cors_url).send(player.id);
         // if(!player){
         //     res.status(404).send();
         // }else {
@@ -192,7 +193,7 @@ app.get('/setScore/:id/:score',(req,res) => {
         }
 
         res.set({
-            'Access-Control-Allow-Origin':'http://game.candy.apps.0302.example.opentlc.com',
+            'Access-Control-Allow-Origin':cors_url,
             'Content-Type': 'application/json',
             'Access-Control-Allow-Methods':'GET, POST, PATCH, PUT, DELETE, OPTIONS',
             'Access-Control-Allow-Headers':'Origin, Content-Type, X-Auth-Token',
